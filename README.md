@@ -1,6 +1,12 @@
 # NAKED
 Autonomous Sanitizer RosBot
 
+## Connecting to RosBot
+
+  RosBot Static IP: 192.168.2.235
+
+  Download OpenVPN Client Community 
+
 ## Setting up Orbbec Astra
   1. Download the latest version of Orbbec OpenNI SDK
   ```
