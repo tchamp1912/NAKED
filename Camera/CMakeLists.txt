@@ -14,15 +14,7 @@ FILE(GLOB CPP_FILES
 
 include_directories(.)
 
-foreach (lib ${LIBS}) 
-  add_subdirectory(${lib})
-endforeach()
-
 add_library(${PROJECT_NAME} STATIC ${CPP_FILES})
-
-foreach (lib ${LIBS}) 
-  target_link_libraries(${PROJECT_NAME} ${lib})
-endforeach()
 
 ######################
 #### External API ####
