@@ -1,11 +1,11 @@
 cmake_minimum_required(VERSION 3.0.2)
 
-project(NAKED)
+project(Camera)
 
 set(CMAKE_CXX_STANDARD 11)
 
-FILE(GLOB BIN_FILES
-  "bin/*.cpp"
+FILE(GLOB CPP_FILES
+  "*.cpp"
   )
 
 ######################
@@ -14,17 +14,11 @@ FILE(GLOB BIN_FILES
 
 include_directories(.)
 
-set(LIBS
-    Camera
-    #Motion
-    #Navigation
-  )
-
 foreach (lib ${LIBS}) 
   add_subdirectory(${lib})
 endforeach()
 
-add_executable(${PROJECT_NAME} ${BIN_FILES})
+add_library(${PROJECT_NAME} STATIC ${CPP_FILES})
 
 foreach (lib ${LIBS}) 
   target_link_libraries(${PROJECT_NAME} ${lib})
