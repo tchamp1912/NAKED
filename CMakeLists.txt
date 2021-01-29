@@ -34,6 +34,8 @@ endforeach()
 #### External API ####
 ######################
 
+set( CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}" ${CMAKE_MODULE_PATH} )
+
 #### OPENCV ####
 
 find_package(OpenCV REQUIRED)
