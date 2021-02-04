@@ -4,6 +4,7 @@
 #include "Map.h"
 
 int main() {
+    // Declare dummy values
     MapCoder coder;
     Map testMap;
     float gridEdgeLen = 0.5;
@@ -14,18 +15,22 @@ int main() {
     Chunk chunk1 = Chunk(cell1, cell2);
     Chunk chunk2 = Chunk(cell3, cell4);
     Chunk chunk3 = Chunk(cell4, cell1); 
-
+    Target target1 = Target(10, 20, 30);
+    Target target2 = Target(11, 21, 31);
+    // Load up the map w/ dummy data
     testMap.gridEdgeLength = gridEdgeLen;
     testMap.blockedCells.push_back(cell1);
     testMap.blockedCells.push_back(cell2);
+    testMap.blockedChunks.push_back(chunk1);
+    testMap.blockedChunks.push_back(chunk2);
+    testMap.blockedChunks.push_back(chunk3);
+    testMap.targets.push_back(target1);
+    testMap.targets.push_back(target2);
+    testMap.qrCodes.push_back(cell4);
+    testMap.qrCodes.push_back(cell1);
     void* bitstream = coder.encode(testMap);
     Map decodedMap = coder.decode(bitstream); 
-
-    assert(decodedMap.gridEdgeLength == gridEdgeLen);
-    assert(decodedMap.blockedCells[0].x == cell1.x);
-    assert(decodedMap.blockedCells[0].y == cell1.y);
-    assert(decodedMap.blockedCells[1].x == cell2.x);
-    assert(decodedMap.blockedCells[1].y == cell2.y);
-
+    // Assure equality
+    assert(decodedMap.equals(testMap));
     std::cout << "\033[1;32mMap encode/decode success\033[0m\n";
 }

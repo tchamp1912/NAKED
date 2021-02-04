@@ -97,9 +97,7 @@ class MapCoder {
             short cells = streamPointer[0];
             streamPointer += 1;
             for (int i = 0; i < cells; i++) {
-                Cell cell;
-                cell.x = streamPointer[0];
-                cell.y = streamPointer[1];
+                Cell cell(streamPointer[0], streamPointer[1]);
                 map->blockedCells.push_back(cell);
                 streamPointer += 2;
             }
@@ -110,11 +108,9 @@ class MapCoder {
             short chunks = streamPointer[0];
             streamPointer += 1;
             for (int i = 0; i < chunks; i++) {
-                Chunk chunk;
-                chunk.topLeft.x = streamPointer[0];
-                chunk.topLeft.y = streamPointer[1];
-                chunk.bottomRight.x = streamPointer[2];
-                chunk.bottomRight.y = streamPointer[3];
+                Cell tl(streamPointer[0], streamPointer[1]);
+                Cell br(streamPointer[2], streamPointer[3]);
+                Chunk chunk(tl, br);
                 map->blockedChunks.push_back(chunk);
                 streamPointer += 4;
             }
@@ -125,10 +121,7 @@ class MapCoder {
             short targets = streamPointer[0];
             streamPointer += 1;
             for (int i = 0; i < targets; i++) {
-                Target target;
-                target.x = streamPointer[0];
-                target.y = streamPointer[1];
-                target.instruction = streamPointer[2];
+                Target target(streamPointer[0], streamPointer[1], streamPointer[2]);
                 map->targets.push_back(target);
                 streamPointer += 3;
             }
@@ -139,9 +132,7 @@ class MapCoder {
             short qrCodes = streamPointer[0];
             streamPointer += 1;
             for (int i = 0; i < qrCodes; i++) {
-                Cell qrCode;
-                qrCode.x = streamPointer[0];
-                qrCode.y = streamPointer[1];
+                Cell qrCode(streamPointer[0], streamPointer[1]);
                 map->qrCodes.push_back(qrCode);
                 streamPointer += 2;
             }
