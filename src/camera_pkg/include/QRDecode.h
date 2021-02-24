@@ -28,8 +28,6 @@ int detectAndDecode(Mat inputImage, Mat rectifiedImage) {
 
   Mat bbox;
 
-  imwrite("/home/husarion/NAKED/Image.jpg", inputImage);
-
   std::string data = qrDecoder.detectAndDecode(inputImage, bbox, rectifiedImage);
   if(data.length()>0)
   {
