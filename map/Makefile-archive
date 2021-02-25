@@ -1,0 +1,16 @@
+# Note: Marked with -archive suffix so not overwritten by cmkae
+
+.PHONY: test clean
+
+test: test.o QrCode.o    
+	g++ -std=c++11 -Wall test.o QrCode.o -o test
+
+test.o: test.cpp
+	g++ -std=c++11 -c test.cpp
+
+QrCode.o: QrCode.cpp QrCode.hpp
+	g++ -std=c++11 -c QrCode.cpp
+
+clean:
+	rm test || True
+	rm *.o || True
