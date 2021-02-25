@@ -4,6 +4,7 @@
 // Responsible for encoding/decoding to/from the struct found in Map.h 
 
 #include "Map.h"
+#include "QrCode.hpp"
 
 class MapCoder {
     public:
@@ -21,6 +22,14 @@ class MapCoder {
             streamPointer = encodeQRCodes(streamPointer, map);
             return bitstream;
         }
+
+        void generateQr(void* bitstream) {
+            char* stream = (char*)bitstream;
+	        const qrcodegen::QrCode::Ecc errCorLvl = qrcodegen::QrCode::Ecc::LOW;  // Error correction level
+            const qrcodegen::QrCode qr = qrcodegen::QrCode::encodeText(stream, errCorLvl);
+            printQr(qr);
+            //std::cout << qr.toSvgString(4) << std::endl;
+    }
 
         Map decode(void* bitstream) {
             Map map;
@@ -137,6 +146,18 @@ class MapCoder {
                 streamPointer += 2;
             }
             return streamPointer;
+        }
+
+        /** Utility */
+        void printQr(const qrcodegen::QrCode &qr) {
+            int border = 4;
+            for (int y = -border; y < qr.getSize() + border; y++) {
+                for (int x = -border; x < qr.getSize() + border; x++) {
+                    std::cout << (qr.getModule(x, y) ? "##" : "  ");
+                }
+                std::cout << std::endl;
+            }
+            std::cout << std::endl;
         }
 };
 
