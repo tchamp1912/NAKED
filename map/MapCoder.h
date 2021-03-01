@@ -71,7 +71,7 @@ class MapCoder {
             streamPointer[0] = targets;
             streamPointer += 1;
             for (int i = 0; i < map.targets.size(); i++) {
-                Target target = map.targets[i];
+                TargetCell target = map.targets[i];
                 streamPointer[0] = target.x;
                 streamPointer[1] = target.y;
                 streamPointer[2] = target.instruction;
@@ -121,7 +121,7 @@ class MapCoder {
             short targets = streamPointer[0];
             streamPointer += 1;
             for (int i = 0; i < targets; i++) {
-                Target target(streamPointer[0], streamPointer[1], streamPointer[2]);
+                TargetCell target(streamPointer[0], streamPointer[1], streamPointer[2]);
                 map->targets.push_back(target);
                 streamPointer += 3;
             }
