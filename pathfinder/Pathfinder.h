@@ -13,7 +13,7 @@ class Pathfinder {
   public:
     Pathfinder(const Map& map);
 
-    CellType&& findPath(const CellType&& cellMap);
+    CellType&& findPathToCell(const Cell& targetCell);
 };
 
 #endif
