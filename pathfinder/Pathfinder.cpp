@@ -173,7 +173,7 @@ CellType&& Pathfinder::findPathToCell(const Cell& sourceCell, const Cell& target
   while(!openList.empty()) {
 
     // find the node with the least f on the open list, call it "q"
-    CellNode& nodeQ = openList.front();
+    CellNode& nodeQ = openList.back();
 
     // pop q off the open list
     openList.pop_back();
@@ -228,8 +228,14 @@ CellType&& Pathfinder::findPathToCell(const Cell& sourceCell, const Cell& target
   
 }
 
-void insertBasedOnF(CellNode& node, std::vector<CellNode>& vector) {
-  
+void insertBasedOnF(CellNode& node, std::vector<CellNode>& list) {
+  for (std::vector<CellNode&>::iterator it; it != list.end(); ++it) {
+    if (node.f > it->f) {
+      list.insert(it, node);
+      return;
+    }
+  }
+  list.push_back(node);
 }
 
 int Pathfinder::findDistance(const Cell& source, const Cell& target) {
@@ -252,19 +258,3 @@ bool Pathfinder::isCellOnMap(const Cell& cell) {
 bool Pathfinder::isCellBlocked(const Cell& cell) {
   return isCellOnMap(cell) && cellMap[cell.x][cell.y] == Blocked;
 }
-
-// CellNode Pathfinder::popTheSmallestF(std::list<CellNode> list) {
-//   int minIndex = 0;
-//   int minF = INT_MAX;
-//   for (int i = 0; i < list.size(); i++) {
-//     if (list.at(i).f < minF) {
-//       minF = list.at(i).f;
-//       minIndex = i;
-//     }
-//   }
-
-//   CellNode result = list.at(minIndex);
-//   list.erase(minIndex);
-
-//   return result;
-// }
