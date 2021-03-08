@@ -14,7 +14,7 @@ class Pathfinder {
 
   public:
     Pathfinder(const Map& map);
-    CellType&& findPathToCell(const Cell& sourceCell, const Cell& targetCell);
+    std::vector<Cell>& findPathToCell(const Cell& sourceCell, const Cell& targetCell);
 
   private:
     void insertBasedOnF(CellNode& node, std::vector<CellNode>& list);
@@ -22,12 +22,13 @@ class Pathfinder {
     bool isThereASmallerF(int f, const std::vector<CellNode>& list);
     bool isCellOnMap(const Cell& cell);
     bool isCellBlocked(const Cell& cell);
+    std::vector<Cell>& generateCoordinateList(const CellNode& node);
 };
 
 enum CellType { Blocked, Unblocked, Target, Source, Qr_Code};
 
 struct CellNode {
-  Cell parent;
+  CellNode* parent;
   Cell cell;
   int f;
   int g;

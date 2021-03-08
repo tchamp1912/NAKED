@@ -149,7 +149,7 @@ Pathfinder::Pathfinder(const Map& map) {
   
 }
 
-CellType&& Pathfinder::findPathToCell(const Cell& sourceCell, const Cell& targetCell) {
+std::vector<Cell>& Pathfinder::findPathToCell(const Cell& sourceCell, const Cell& targetCell) {
   // Initialize the open list
   std::vector<CellNode&> openList;
 
@@ -158,16 +158,20 @@ CellType&& Pathfinder::findPathToCell(const Cell& sourceCell, const Cell& target
   // bool closedList[xLength][yLength];
   // memset(closedList, false, sizeof(closedList));
 
+  std::vector<Cell>* pathCoordinates;
+  pathCoordinates->push_back(sourceCell);
+
   // put the starting node on the open list
   CellNode sourceNode;
-  sourceNode.parent = sourceCell;
+  sourceNode.parent = nullptr;
   sourceNode.cell = sourceCell;
   sourceNode.g = 0;
   sourceNode.h = findDistance(sourceCell, targetCell);
   sourceNode.f = sourceNode.g + sourceNode.h;
 
   CellNode& sourceNodeRef = sourceNode;
-  openList.push_back(sourceNodeRef);
+
+  openList.push_back(sourceNode);
 
   // while the open list is not empty
   while(!openList.empty()) {
@@ -178,13 +182,28 @@ CellType&& Pathfinder::findPathToCell(const Cell& sourceCell, const Cell& target
     // pop q off the open list
     openList.pop_back();
 
+    // generate successor cells
     Cell northCell{nodeQ.cell.x, nodeQ.cell.y + 1};
-    CellNode north;
-    north.parent = nodeQ.cell;
-    north.cell = northCell;
-    north.g = nodeQ.g + 1;
-    north.h = findDistance(northCell, targetCell);
-    north.f = north.g + north.h;
+    Cell southCell{nodeQ.cell.x, nodeQ.cell.y - 1};
+    Cell westCell{nodeQ.cell.x - 1, nodeQ.cell.y};
+    Cell eastCell{nodeQ.cell.x + 1, nodeQ.cell.y};
+
+    if (isCellOnMap(northCell)) {
+      CellNode north;
+      north.parent = &nodeQ;
+      north.cell = northCell;
+      north.g = nodeQ.g + 1;
+      north.h = findDistance(northCell, targetCell);
+      north.f = north.g + north.h;
+
+      CellNode& northRef = north;
+
+      if(northRef.cell.equals(targetCell)) {
+        return generateCoordinateList(northRef);
+      }
+    }
+
+    
 
     
   }
@@ -257,4 +276,17 @@ bool Pathfinder::isCellOnMap(const Cell& cell) {
 
 bool Pathfinder::isCellBlocked(const Cell& cell) {
   return isCellOnMap(cell) && cellMap[cell.x][cell.y] == Blocked;
+}
+
+std::vector<Cell>& Pathfinder::generateCoordinateList(const CellNode& node) {
+  std::vector<Cell> coordinateList;
+
+  CellNode curNode = node;
+
+  do {
+    coordinateList.push_back(curNode.cell);
+    curNode = *curNode.parent;
+  } while(node.parent != nullptr);
+
+  return coordinateList;
 }
