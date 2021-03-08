@@ -189,65 +189,93 @@ std::vector<Cell>& Pathfinder::findPathToCell(const Cell& sourceCell, const Cell
     Cell eastCell{nodeQ.cell.x + 1, nodeQ.cell.y};
 
     if (isCellOnMap(northCell)) {
-      CellNode north;
-      north.parent = &nodeQ;
-      north.cell = northCell;
-      north.g = nodeQ.g + 1;
-      north.h = findDistance(northCell, targetCell);
-      north.f = north.g + north.h;
+      if (!isCellBlocked(northCell)) {
+        CellNode north;
+        north.parent = &nodeQ;
+        north.cell = northCell;
+        north.g = nodeQ.g + 1;
+        north.h = findDistance(northCell, targetCell);
+        north.f = north.g + north.h;
 
-      CellNode& northRef = north;
+        if (north.cell.equals(targetCell)) {
+          return generateCoordinateList(north);
+        }
 
-      if(northRef.cell.equals(targetCell)) {
-        return generateCoordinateList(northRef);
+        if (!isThereASmallerF(north, openList)) {
+          if (!isThereASmallerF(north, closedList)) {
+            insertBasedOnF(north, openList);
+          }
+        }
       }
     }
 
-    
+    if (isCellOnMap(southCell)) {
+      if (!isCellBlocked(southCell)) {
+        CellNode south;
+        south.parent = &nodeQ;
+        south.cell = southCell;
+        south.g = nodeQ.g + 1;
+        south.h = findDistance(southCell, targetCell);
+        south.f = south.g + south.h;
 
-    
+        if (south.cell.equals(targetCell)) {
+          return generateCoordinateList(south);
+        }
+
+        if (!isThereASmallerF(south, openList)) {
+          if (!isThereASmallerF(south, closedList)) {
+            insertBasedOnF(south, openList);
+          }
+        }
+      }    
+    }
+
+    if (isCellOnMap(eastCell)) {
+      if (!isCellBlocked(eastCell)) {
+        CellNode east;
+        east.parent = &nodeQ;
+        east.cell = eastCell;
+        east.g = nodeQ.g + 1;
+        east.h = findDistance(eastCell, targetCell);
+        east.f = east.g + east.h;
+
+        if (east.cell.equals(targetCell)) {
+          return generateCoordinateList(east);
+        }
+
+        if (!isThereASmallerF(east, openList)) {
+          if (!isThereASmallerF(east, closedList)) {
+            insertBasedOnF(east, openList);
+          }
+        } 
+      }    
+    }
+
+    if (isCellOnMap(westCell)) {
+      if (!isCellBlocked(westCell)) {
+        CellNode west;
+        west.parent = &nodeQ;
+        west.cell = westCell;
+        west.g = nodeQ.g + 1;
+        west.h = findDistance(westCell, targetCell);
+        west.f = west.g + west.h;
+
+        if (west.cell.equals(targetCell)) {
+          return generateCoordinateList(west);
+        }
+
+        if (!isThereASmallerF(west, openList)) {
+          if (!isThereASmallerF(west, closedList)) {
+            insertBasedOnF(west, openList);
+          }
+        }
+      }    
+    }
+    closedList.push_back(nodeQ);
   }
-
-
-    
-  //     c) generate q's 8 successors and set their 
-  //        parents to q
-    
-  //     d) for each successor
-  //         i) if successor is the goal, stop search
-  //           successor.g = q.g + distance between 
-  //                               successor and q
-  //           successor.h = distance from goal to 
-  //           successor (This can be done using many 
-  //           ways, we will discuss three heuristics- 
-  //           Manhattan, Diagonal and Euclidean 
-  //           Heuristics)
-            
-  //           successor.f = successor.g + successor.h
-
-  //         ii) if a node with the same position as 
-  //             successor is in the OPEN list which has a 
-  //            lower f than successor, skip this successor
-
-  //         iii) if a node with the same position as 
-  //             successor  is in the CLOSED list which has
-  //             a lower f than successor, skip this successor
-  //             otherwise, add  the node to the open list
-  //      end (for loop)
-    
-  //     e) push q on the closed list
-  //     end (while loop)
-
-
-  
-  
-
-  
-
-  
 }
 
-void insertBasedOnF(CellNode& node, std::vector<CellNode>& list) {
+void insertBasedOnF(CellNode& node, std::vector<CellNode&>& list) {
   for (std::vector<CellNode&>::iterator it; it != list.end(); ++it) {
     if (node.f > it->f) {
       list.insert(it, node);
@@ -261,9 +289,9 @@ int Pathfinder::findDistance(const Cell& source, const Cell& target) {
   return std::abs(source.x - target.x) + std::abs(source.y - target.y);
 }
 
-bool Pathfinder::isThereASmallerF(int f, const std::vector<CellNode>& list) {
+bool Pathfinder::isThereASmallerF(const CellNode node, std::vector<CellNode&>& list) {
   for (int i = 0; i < list.size(); i++) {
-    if (list.at(i).f < f) {
+    if (list.at(i).cell.equals(node.cell) && list.at(i).f < node.f) {
       return true;
     }
   }

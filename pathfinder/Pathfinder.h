@@ -17,9 +17,9 @@ class Pathfinder {
     std::vector<Cell>& findPathToCell(const Cell& sourceCell, const Cell& targetCell);
 
   private:
-    void insertBasedOnF(CellNode& node, std::vector<CellNode>& list);
+    void insertBasedOnF(CellNode& node, std::vector<CellNode&>& list);
     int findDistance(const Cell& source, const Cell& target);
-    bool isThereASmallerF(int f, const std::vector<CellNode>& list);
+    bool isThereASmallerF(const CellNode node, std::vector<CellNode&>& list);
     bool isCellOnMap(const Cell& cell);
     bool isCellBlocked(const Cell& cell);
     std::vector<Cell>& generateCoordinateList(const CellNode& node);
