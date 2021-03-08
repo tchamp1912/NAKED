@@ -42,8 +42,8 @@ struct Chunk {
     }
 };
 
-struct Targeta {
-    Targeta(short x_, short y_, short instruction_) {
+struct TargetCell {
+    TargetCell(short x_, short y_, short instruction_) {
         x = x_;
         y = y_;
         instruction = instruction_;
@@ -53,7 +53,7 @@ struct Targeta {
     short y;
     short instruction;
 
-    bool equals(Targeta other) {
+    bool equals(TargetCell other) {
         return x == other.x && y == other.y && instruction == other.instruction;
     }
 };
@@ -62,7 +62,7 @@ struct Map {
     float gridEdgeLength;               // In meters
     std::vector<Cell> blockedCells;    
     std::vector<Chunk> blockedChunks;
-    std::vector<Targeta> targets;        // Sanitization targets
+    std::vector<TargetCell> targets;        // Sanitization targets
     std::vector<Cell> qrCodes;          // Location of other codes in environment
 
     bool equals(Map other) {

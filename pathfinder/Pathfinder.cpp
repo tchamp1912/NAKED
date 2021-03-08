@@ -1,4 +1,6 @@
 #include <limits.h>
+#include <list>
+#include <cmath>
 
 #include "Pathfinder.h"
 #include "../map/Map.h"
@@ -94,14 +96,14 @@ Pathfinder::Pathfinder(const Map& map) {
     }
   }
 
-  int xLength = maxX - minX + 1;
-  int yLength = maxY - minY + 1;
+  this->xLength = maxX - minX + 1;
+  this->yLength = maxY - minY + 1;
 
-  int xShift = -minX;
-  int yShift = -minY;
+  this->xShift = -minX;
+  this->yShift = -minY;
 
   // Initialize the 2D array
-  cellMap = new CellType*[xLength];
+  this->cellMap = new CellType*[xLength];
   for (int i = 0; i < xLength; i++) {
     cellMap[i] = new CellType[yLength];
   }
@@ -146,3 +148,123 @@ Pathfinder::Pathfinder(const Map& map) {
 
   
 }
+
+CellType&& Pathfinder::findPathToCell(const Cell& sourceCell, const Cell& targetCell) {
+  // Initialize the open list
+  std::vector<CellNode&> openList;
+
+  // Initialize the closed list
+  std::vector<CellNode&> closedList;
+  // bool closedList[xLength][yLength];
+  // memset(closedList, false, sizeof(closedList));
+
+  // put the starting node on the open list
+  CellNode sourceNode;
+  sourceNode.parent = sourceCell;
+  sourceNode.cell = sourceCell;
+  sourceNode.g = 0;
+  sourceNode.h = findDistance(sourceCell, targetCell);
+  sourceNode.f = sourceNode.g + sourceNode.h;
+
+  CellNode& sourceNodeRef = sourceNode;
+  openList.push_back(sourceNodeRef);
+
+  // while the open list is not empty
+  while(!openList.empty()) {
+
+    // find the node with the least f on the open list, call it "q"
+    CellNode& nodeQ = openList.front();
+
+    // pop q off the open list
+    openList.pop_back();
+
+    Cell northCell{nodeQ.cell.x, nodeQ.cell.y + 1};
+    CellNode north;
+    north.parent = nodeQ.cell;
+    north.cell = northCell;
+    north.g = nodeQ.g + 1;
+    north.h = findDistance(northCell, targetCell);
+    north.f = north.g + north.h;
+
+    
+  }
+
+
+    
+  //     c) generate q's 8 successors and set their 
+  //        parents to q
+    
+  //     d) for each successor
+  //         i) if successor is the goal, stop search
+  //           successor.g = q.g + distance between 
+  //                               successor and q
+  //           successor.h = distance from goal to 
+  //           successor (This can be done using many 
+  //           ways, we will discuss three heuristics- 
+  //           Manhattan, Diagonal and Euclidean 
+  //           Heuristics)
+            
+  //           successor.f = successor.g + successor.h
+
+  //         ii) if a node with the same position as 
+  //             successor is in the OPEN list which has a 
+  //            lower f than successor, skip this successor
+
+  //         iii) if a node with the same position as 
+  //             successor  is in the CLOSED list which has
+  //             a lower f than successor, skip this successor
+  //             otherwise, add  the node to the open list
+  //      end (for loop)
+    
+  //     e) push q on the closed list
+  //     end (while loop)
+
+
+  
+  
+
+  
+
+  
+}
+
+void insertBasedOnF(CellNode& node, std::vector<CellNode>& vector) {
+  
+}
+
+int Pathfinder::findDistance(const Cell& source, const Cell& target) {
+  return std::abs(source.x - target.x) + std::abs(source.y - target.y);
+}
+
+bool Pathfinder::isThereASmallerF(int f, const std::vector<CellNode>& list) {
+  for (int i = 0; i < list.size(); i++) {
+    if (list.at(i).f < f) {
+      return true;
+    }
+  }
+  return false;
+}
+
+bool Pathfinder::isCellOnMap(const Cell& cell) {
+  return cell.x >= 0 && cell.y >= 0 && cell.x < xLength && cell.y < yLength;
+}
+
+bool Pathfinder::isCellBlocked(const Cell& cell) {
+  return isCellOnMap(cell) && cellMap[cell.x][cell.y] == Blocked;
+}
+
+// CellNode Pathfinder::popTheSmallestF(std::list<CellNode> list) {
+//   int minIndex = 0;
+//   int minF = INT_MAX;
+//   for (int i = 0; i < list.size(); i++) {
+//     if (list.at(i).f < minF) {
+//       minF = list.at(i).f;
+//       minIndex = i;
+//     }
+//   }
+
+//   CellNode result = list.at(minIndex);
+//   list.erase(minIndex);
+
+//   return result;
+// }
