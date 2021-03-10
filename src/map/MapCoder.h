@@ -2,6 +2,9 @@
 #define MAPCODER
 
 // Responsible for encoding/decoding to/from the struct found in Map.h 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string>
 
 #include "Map.h"
 #include "QrCode.hpp"
@@ -27,7 +30,21 @@ class MapCoder {
             char* stream = (char*)bitstream;
 	        const qrcodegen::QrCode::Ecc errCorLvl = qrcodegen::QrCode::Ecc::LOW;  // Error correction level
             const qrcodegen::QrCode qr = qrcodegen::QrCode::encodeText(stream, errCorLvl);
-            printQr(qr);
+            // Made qr, now save in NetPBM/PBMplus format
+            FILE *imageFile = fopen("qr.pgm","wb");
+            int pixel, size = qr.getSize();
+            fprintf(imageFile, "P5\n");                     // P5 filetype
+            fprintf(imageFile, "%d %d\n", size, size);      // Dimensions
+            fprintf(imageFile,"255\n");                     // Max pixel
+            for(int x = 0; x < size; x++){
+                for(int y = 0; y < size; y++){
+                    pixel = qr.getModule(x, y) ? 0 : 255;
+                    std::cout << (qr.getModule(x, y) ? "##" : "  ");
+                    fputc(pixel,imageFile);
+                }
+                std::cout << std::endl;
+            }
+            fclose(imageFile);
             //std::cout << qr.toSvgString(4) << std::endl;
     }
 
