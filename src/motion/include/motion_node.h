@@ -7,38 +7,34 @@
 #include <map>
 #include <iostream>
 
-enum Movement {
-
-};
 
 class Motion {
 public:
-  Motion(ros::NodeHandle nh) :
-     {
-        motion_pub = nh.advertise<geometry_msgs::Twist>("cmd_vel", 1); 
-        odom_sub = nh.subscriber<nav_msgs::Odometry>("odom", 1, &Motion::odometryCallback, this);
-	      control_sub = nh.subscriber<std_msgs::String>("control_move", 1, &Motion::movementCallback, this);
-
-        rate = ros::Rate(2);
-        float speed = .5;
-        float turn = 1.0;
-      };	
+  Motion(ros::NodeHandle nh) {
+    motion_pub = nh.advertise<geometry_msgs::Twist>("cmd_vel", 1); 
+    odom_sub = nh.subscribe<nav_msgs::Odometry>("/odom/wheel", 1, &Motion::odometryCallback, this);
+    control_sub = nh.subscribe<std_msgs::String>("control_move", 1, &Motion::movementCallback, this);
+  };	
 
   enum Movement {
     FORWARD = 'i',
     RIGHT = 'l',
     LEFT = 'j',
-    BACK = 'k''
+    BACK = 'k',
+    STOP = ','
   };
 
-  bool odometryCallback(nav_msgs::Odometry odom) {
-    std::cout << odom.pose.point << std::endl;
-    std::cout << odom.pose.orientation << std::endl;
+  void odometryCallback(nav_msgs::Odometry odom) {
+    //std::cout << odom.pose.pose.position.x << std::endl;
+    //std::cout << odom.pose.pose.position.y << std::endl;
+    //std::cout << odom.pose.pose.position.z << std::endl;
+
+    //std::cout << odom.pose.orientation << std::endl;
   }
 
-  bool movementCallback(std_msgs::String cmd) 
+  void movementCallback(std_msgs::String cmd) 
   {
-    switch(cmd.data) {
+    switch(cmd.data[0]) {
     case FORWARD:
       movement.linear.x = speed * 1;
       movement.linear.y = speed * 0;
@@ -79,22 +75,26 @@ public:
       movement.angular.z = turn * 0;
       break;
     }
+
+    motion_pub.publish(movement); 
   };
 
   void loop(ros::NodeHandle n) {
+    ros::Rate loop_rate(10);
     while(n.ok()) {
-      ros::SpinOnce();
-
-      motion_pub.pub(movement); 
+      ros::spinOnce();
+      loop_rate.sleep();
     }
   }
   
 private:
   // Motion specific parameters
-  geometry_msgs::Twist movement = geometry_msgs::Twist(0,0,0,0,0,0);
+  geometry_msgs::Twist movement;
+  static const float speed = 0.5;
+  static const float turn = 1.0;
 
   // ROS componenets
-  ros::Publisher<geometry_msgs::Twist> motion_pub;
-  ros::Subscriber<nav_msgs::Odometry> odom_sub;
-  ros::Subscriber<std_msgs::String> control_sub; 
+  ros::Publisher motion_pub;
+  ros::Subscriber odom_sub;
+  ros::Subscriber control_sub; 
 };

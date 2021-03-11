@@ -5,7 +5,7 @@
 int main(int argc, char** argv)
 {
     ros::init(argc, argv, "motion_node");
-    ros::NodeHandle n("~");
+    ros::NodeHandle n;
     Motion m_node(n);
 
     m_node.loop(n);

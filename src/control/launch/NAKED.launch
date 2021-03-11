@@ -7,7 +7,7 @@
     <include file="$(find rosbot_ekf)/launch/all.launch"/>
 
     <include file="$(find camera_pkg)/launch/camera_pkg_node.launch"/>
-    <include file="$(find camera_pkg)/launch/control_node.launch"/>
-    <include file="$(find camera_pkg)/launch/motion_node.launch"/>
+    <include file="$(find control)/launch/control.launch"/>
+    <include file="$(find motion)/launch/motion.launch"/>
 
 </launch>
