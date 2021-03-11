@@ -6,7 +6,7 @@
 int main(int argc, char **argv)
 {
    ros::init(argc, argv, "control_node");
-   ros::NodeHandle n("~");
+   ros::NodeHandle n;
 
    UserDriver drv(n);
 

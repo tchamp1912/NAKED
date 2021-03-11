@@ -61,7 +61,7 @@ class UserDriver {
     }
 
     static void qrCallback(std_msgs::String msg) {
-        std::cout << msg.data << std::endl;
+        std::cout << msg.data.c_str() << std::endl;
     }
 
     static void rosLoop() {
