@@ -23,7 +23,12 @@ public:
 			return;
 		}
 
+		try {
         invokeCallback();
+		} catch (cv::Exception& e) {
+			ROS_ERROR("opencv exception: %s", e.what());
+			return;
+		}
 	};
 
 	std::string getData() { return data; }

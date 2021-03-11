@@ -23,6 +23,7 @@ std::string detectAndDecode(Mat inputImage) {
   }
   else 
   {
-    return NULL;
+    data = "None";
+    return data;
   }
 }
