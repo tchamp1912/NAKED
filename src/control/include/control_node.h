@@ -8,16 +8,17 @@
 #include <thread>
 
 #include <ros/ros.h>
+#include <std_msgs/String.h>
 
 class UserDriver {
     public:
-    UserDriver(ros::NodeHandle nh) : thread() {
+    UserDriver(ros::NodeHandle nh) {
         move_pub = nh.advertise<std_msgs::String>("control_move", 50);
 
-        qr_sub = nh.subscribe("camera_pkg_node/qr_code", 50, &qrCallback);
+        qr_sub = nh.subscribe("qr_code", 50, &qrCallback);
     }
 
-    bool input_loop(ros::NodeHandle nh) {
+    bool input_loop(ros::NodeHandle &nh) {
         struct termios t;
         struct termios t_saved;
 
@@ -31,23 +32,23 @@ class UserDriver {
             perror("Unable to set terminal to single character mode");
             return -1;
         }
-        std::streambuf *pbuf = cin.rdbuf();
+        std::streambuf *pbuf = std::cin.rdbuf();
         bool done = false;
         while (nh.ok()) {
             // Read single characters from cin.
-            cout << "Enter an character (or esc to quit): " << endl;
+            std::cout << "Enter an character (or esc to quit): " << std::endl;
             char c;
             if (pbuf->sgetc() == EOF) done = true;
             c = pbuf->sbumpc();
             if (c == 0x1b) {
                 done = true;
             } else {
-                cout << "You entered character 0x" << setw(2) << setfill('0') << hex << int(c) << "'" << endl;
+                std::cout << "You entered character 0x" << std::setw(2) << std::setfill('0') << std::hex << int(c) << "'" << std::endl;
             }
 
             std_msgs::String msg;
             msg.data = &c;
-            move_pub(msg);
+            move_pub.publish(msg);
         }
         // Restore terminal mode.
         if (tcsetattr(fileno(stdin), TCSANOW, &t_saved) < 0) {
@@ -73,6 +74,6 @@ class UserDriver {
     }
 
     private:
-    ros::Publisher<std_msgs::String> move_pub;
-    ros::Subscriber<std_msgs::String> qr_sub
+    ros::Publisher move_pub;
+    ros::Subscriber qr_sub;
 };

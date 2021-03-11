@@ -8,6 +8,6 @@
 
     <include file="$(find camera_pkg)/launch/camera_pkg_node.launch"/>
     <include file="$(find camera_pkg)/launch/control_node.launch"/>
-    <include file="$(find camera_pkg)/launch/control_node.launch"/>
+    <include file="$(find camera_pkg)/launch/motion_node.launch"/>
 
 </launch>

@@ -30,11 +30,11 @@ public:
 
 private:
 
-	void invokeCallback() { data = callback(rawImage->image, rectifiedImage); };
+	void invokeCallback() { data = callback(rawImage->image); };
 
 	cv::Size res;
 	std::string data;
 	cv_bridge::CvImagePtr rawImage;
-	std::function<std::string(cv::Mat&, cv::Mat&)> callback;
+	std::function<std::string(cv::Mat&)> callback;
 		
 };

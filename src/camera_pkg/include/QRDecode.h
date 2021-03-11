@@ -9,9 +9,10 @@
 using namespace cv;
 using namespace std;
 
-std::string detectAndDecode(Mat inputImage, Mat rectifiedImage) {
+std::string detectAndDecode(Mat inputImage) {
 
   static QRCodeDetector qrDecoder;
+  cv::Mat rectifiedImage;
 
   Mat bbox;
 

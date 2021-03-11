@@ -1,7 +1,7 @@
 #include <ros/ros.h>
 #include <std_msgs/String.h>
 
-#include "source_node.h"
+#include "control_node.h"
 
 int main(int argc, char **argv)
 {
@@ -10,7 +10,7 @@ int main(int argc, char **argv)
 
    UserDriver drv(n);
 
-   std::thread publish(&UserDriver::input_loop, &drv);
+   std::thread publish(&UserDriver::input_loop, &drv, std::ref(n));
    std::thread subscribe(UserDriver::rosLoop);
 
    publish.join();
