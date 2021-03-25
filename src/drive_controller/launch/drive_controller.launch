@@ -1,0 +1,6 @@
+<launch>
+
+    <node pkg="drive_controller" type="drive_controller_node" name="drive_controller_node" output="screen">
+    </node>
+
+</launch>

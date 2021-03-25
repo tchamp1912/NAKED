@@ -4,7 +4,10 @@
 
     <include unless="$(arg use_gazebo)" file="$(find astra_launch)/launch/astra.launch"/>
     <include if="$(arg use_gazebo)" file="$(find rosbot_description)/launch/rosbot.launch"/>
+    <include file="$(find rosbot_ekf)/launch/all.launch"/>
 
     <include file="$(find camera_pkg)/launch/camera_pkg_node.launch"/>
+    <include file="$(find camera_pkg)/launch/control_node.launch"/>
+    <include file="$(find camera_pkg)/launch/control_node.launch"/>
 
 </launch>

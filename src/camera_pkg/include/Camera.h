@@ -12,11 +12,7 @@ public:
 		res(width_, height_)
 		{}
 
-	bool init() {
-		rectifiedImage = cv::Mat(res, CV_8UC3);
-	};
-
-	bool registerCallback(std::function<void(cv::Mat&, cv::Mat&)> callback_) { callback = callback_; };
+	bool registerCallback(std::function<std::string(cv::Mat&)> callback_) { callback = callback_; };
 
 	void imageCallback(const sensor_msgs::ImageConstPtr &image) {
 		
@@ -27,18 +23,23 @@ public:
 			return;
 		}
 
-        	invokeCallback();
+		try {
+        invokeCallback();
+		} catch (cv::Exception& e) {
+			ROS_ERROR("opencv exception: %s", e.what());
+			return;
+		}
 	};
 
-	void invokeCallback() { callback(rawImage->image, rectifiedImage); };
-
-	cv::Mat getRectifiedImage() { return rectifiedImage; }
+	std::string getData() { return data; }
 
 private:
 
+	void invokeCallback() { data = callback(rawImage->image); };
+
 	cv::Size res;
+	std::string data;
 	cv_bridge::CvImagePtr rawImage;
-	cv::Mat rectifiedImage;
-	std::function<void(cv::Mat&, cv::Mat&)> callback;
+	std::function<std::string(cv::Mat&)> callback;
 		
 };
