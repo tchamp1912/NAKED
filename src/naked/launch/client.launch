@@ -59,6 +59,4 @@
         <rosparam file="$(find naked)/config/trajectory_planner.yaml" command="load" />
     </node>
 
-    <include file="$(find camera_pkg)/launch/camera_pkg_node.launch"/>
-
 </launch>
