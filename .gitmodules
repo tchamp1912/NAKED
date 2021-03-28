@@ -7,9 +7,6 @@
 [submodule "depthimage_to_laserscan"]
 	path = depthimage_to_laserscan
 	url = https://github.com/ros-perception/depthimage_to_laserscan.git
-[submodule "src/grid_map"]
-	path = src/grid_map
-	url = https://github.com/ANYbotics/grid_map.git
 [submodule "src/image_common"]
 	path = src/image_common
 	url = https://github.com/ros-perception/image_common.git
