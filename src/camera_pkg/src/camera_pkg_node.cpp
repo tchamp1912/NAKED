@@ -11,7 +11,7 @@ int main( int argc, char* argv[] )
 
    ros::init(argc, argv, "camera_pkg_node");
    ros::NodeHandle n;
-   ros::Subscriber img_sub = n.subscribe("/camera/rgb/image_raw", 10, &Camera::imageCallback, &cam);
+   ros::Subscriber img_sub = n.subscribe("/rgb_raw", 10, &Camera::imageCallback, &cam);
    ros::Publisher qr_pub = n.advertise<std_msgs::String>("qr_code", 10);
    ros::Rate loop_rate(50);
 
