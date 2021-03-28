@@ -19,9 +19,3 @@
 [submodule "src/navigation"]
 	path = src/navigation
 	url = https://github.com/ros-planning/navigation.git
-[submodule "src/octomap_msgs"]
-	path = src/octomap_msgs
-	url = https://github.com/OctoMap/octomap_msgs.git
-[submodule "src/frontier_exploration"]
-	path = src/frontier_exploration
-	url = https://github.com/paulbovbel/frontier_exploration.git
