@@ -124,9 +124,6 @@ catkin_package(
 include_directories(
   include
   /usr/include/eigen3/
-  ../grid_map/grid_map_core/include
-  ../grid_map/grid_map_msgs/include
-  ../frontier_exploration/frontier_exploration/include
   ${catkin_INCLUDE_DIRS}
     ${OpenCV_INCLUDE_DIRS}
 )

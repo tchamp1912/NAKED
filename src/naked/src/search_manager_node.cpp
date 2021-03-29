@@ -324,7 +324,7 @@ void cancel_exploration_action()
 void start_frontier_exploration()
 {
    exploration_in_progress = true;
-   actionlib::SimpleActionClient<frontier_exploration::ExploreTaskAction> exploreClient("exploration_server", true);
+   actionlib::SimpleActionClient<frontier_exploration::ExploreTaskAction> exploreClient("explore_server", true);
    exploreClient.waitForServer();
    ROS_INFO("Sending goal");
    exploreClient.sendGoal(sm->createExplorationGoal());
@@ -388,14 +388,14 @@ int main(int argc, char **argv)
    ros::Subscriber sub = node.subscribe("/proj_scan", 1, scanCallback);
    ros::Subscriber gridMapSub = node.subscribe("/map", 1, gridMapCallback);
    ros::Subscriber move_base_status_sub = node.subscribe("/move_base/status", 1, status_callback);
-   ros::Subscriber exploration_status_sub = node.subscribe("/exploration_server/status", 1, explore_status_callback);
+   ros::Subscriber exploration_status_sub = node.subscribe("/explore_server/status", 1, explore_status_callback);
 
    publisher_obstacles_found = node.advertise<nav_msgs::OccupancyGrid>("/obstacles/found", 1);
    publisher_checked_obstacles = node.advertise<nav_msgs::OccupancyGrid>("/obstacles/checked", 1);
    publisher_pending_obstacles = node.advertise<nav_msgs::OccupancyGrid>("/obstacles/pending", 1);
    publisher_exploration_goal = node.advertise<geometry_msgs::PoseStamped>("/move_base_simple/goal", 1);
    goal_pub = node.advertise<actionlib_msgs::GoalID>("/move_base/cancel", 1);
-   explore_canceller = node.advertise<actionlib_msgs::GoalID>("/exploration_server/cancel", 1);
+   explore_canceller = node.advertise<actionlib_msgs::GoalID>("/explore_server/cancel", 1);
    listener = new tf::TransformListener();
 
    map = new grid_map::GridMap({"input_og"});
@@ -488,5 +488,7 @@ int main(int argc, char **argv)
    {
       ROS_WARN("qr_code search cancelled with external signal");
    }
+
+
    return 0;
 }

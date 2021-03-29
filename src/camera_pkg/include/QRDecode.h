@@ -11,7 +11,7 @@ using namespace std;
 
 std::string detectAndDecode(Mat inputImage) {
 
-  static QRCodeDetector qrDecoder;
+  cv::QRCodeDetector qrDecoder;
   cv::Mat rectifiedImage;
 
   Mat bbox;
