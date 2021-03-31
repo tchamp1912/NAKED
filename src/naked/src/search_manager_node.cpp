@@ -415,7 +415,7 @@ int main(int argc, char **argv)
    obstacles->setGeometry(map->getLength(), map->getResolution());
    obstacles->setPosition(map->getPosition());
 
-   ros::Rate rate(5000.0);
+   ros::Rate rate(50.0);
 
    start_frontier_exploration();
 
