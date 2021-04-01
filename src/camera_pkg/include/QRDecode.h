@@ -10,7 +10,6 @@ using namespace cv;
 using namespace std;
 
 std::string detectAndDecode(Mat inputImage) {
-
   cv::QRCodeDetector qrDecoder;
   cv::Mat rectifiedImage;
 
@@ -19,9 +18,10 @@ std::string detectAndDecode(Mat inputImage) {
   std::string data = qrDecoder.detectAndDecode(inputImage, bbox, rectifiedImage);
   if(data.length()>0)
   {
+    ROS_INFO("QR detected and decoded by OpenCV");
     return data;
   }
-  else 
+  else
   {
     data = "None";
     return data;

@@ -1,5 +1,5 @@
 #include <search_manager_node.h>
-
+#include "MapCoder.h"
 /**
  * brief Computes the bearing in degrees from the point A(a1,a2) to the point B(b1,b2).
  * param a1 x coordinate of point A
@@ -378,6 +378,7 @@ int main(int argc, char **argv)
    ros::NodeHandle node("~");
 
    sm = new SearchManager();
+   MapCoder mc;
 
    exploration_failed = false;
    qr_code_search_in_progress = false;
@@ -419,6 +420,7 @@ int main(int argc, char **argv)
 
    start_frontier_exploration();
 
+   ROS_INFO("entering exploration loop");
    while (exploration_in_progress && node.ok() && !qr_code_found)
    {
       ros::spinOnce();
@@ -431,6 +433,9 @@ int main(int argc, char **argv)
       ROS_INFO("qr_code detected during exploration, stop exploration task");
       cancel_exploration_action();
       cancel_move_base_action();
+      const char* byte_array = qr_code.c_str();
+      Map map = mc.decode((void*)byte_array);
+      ROS_INFO("%s\n", map.print().c_str());
       node.shutdown();
       return 0;
    }
@@ -476,6 +481,9 @@ int main(int argc, char **argv)
       if (qr_code_found)
       {
          ROS_INFO("qr_code search succeeded");
+	 const char* byte_array = qr_code.c_str();
+      	 Map map = mc.decode((void*)byte_array);
+      	 ROS_INFO("%s\n", map.print().c_str());
       }
       else
       {

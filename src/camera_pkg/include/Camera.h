@@ -1,7 +1,7 @@
 #include <functional>
 
 #include <sensor_msgs/Image.h>
-#include <cv_bridge/cv_bridge.h>		
+#include <cv_bridge/cv_bridge.h>
 
 #include <opencv2/core/mat.hpp>
 
@@ -15,7 +15,6 @@ public:
 	bool registerCallback(std::function<std::string(cv::Mat&)> callback_) { callback = callback_; };
 
 	void imageCallback(const sensor_msgs::ImageConstPtr &image) {
-		
 		try {
 			rawImage = cv_bridge::toCvCopy(image, sensor_msgs::image_encodings::RGB8);
 		} catch (cv_bridge::Exception& e) {
@@ -24,7 +23,7 @@ public:
 		}
 
 		try {
-        invokeCallback();
+        		invokeCallback();
 		} catch (cv::Exception& e) {
 			ROS_ERROR("opencv exception: %s", e.what());
 			return;
@@ -41,5 +40,5 @@ private:
 	std::string data;
 	cv_bridge::CvImagePtr rawImage;
 	std::function<std::string(cv::Mat&)> callback;
-		
+
 };
