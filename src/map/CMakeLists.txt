@@ -4,6 +4,8 @@ project(Map)
 
 set(CMAKE_CXX_STANDARD 11)
 
+add_executable(gen_qr gen_qr.cpp QrCode.cpp)
+
 FILE(GLOB CPP_FILES
   "*.cpp"
   )
